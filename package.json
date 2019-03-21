@@ -1,0 +1,14 @@
+{
+  "name": "serifi",
+  "version": "1.0.0",
+  "description": "serial interface for arduino, connecting to LAN",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xavi Torrens",
+  "license": "ISC",
+  "dependencies": {
+    "serialport": "^7.1.4"
+  }
+}
