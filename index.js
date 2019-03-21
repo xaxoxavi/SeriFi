@@ -2,6 +2,7 @@ const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const moment = require('moment');
 const verify = require('./verify-mock');
+const constants = require('./constants');
 
 // Response Object
 function Response(rfid, date, hour, weekDay, idMachine) {
@@ -47,7 +48,7 @@ parserNfc.on('data', async function (rfid) {
     let responseObj = new Response(rfid, date, hour, weekDay, idMachine);
 
     console.log(responseObj);
-    
+
     let isVerified = await verify.verifyRFID(responseObj);
    
     sendToArduino(isVerified,rfid);

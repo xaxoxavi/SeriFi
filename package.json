@@ -9,6 +9,8 @@
   "author": "Xavi Torrens",
   "license": "ISC",
   "dependencies": {
+    "@serialport/parser-readline": "^2.0.2",
+    "moment": "^2.24.0",
     "serialport": "^7.1.4"
   }
 }
