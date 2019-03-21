@@ -2,9 +2,7 @@ const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const moment = require('moment');
 const verify = require('./verify-mock');
-const constants = require('./constants');
-
-let insertMode = false;
+const {nfcPort, lcdPort} = require('./constants');
 
 // Response Object
 function Response(rfid, date, hour, weekDay, idMachine) {
@@ -15,7 +13,7 @@ function Response(rfid, date, hour, weekDay, idMachine) {
     this.idMachine = idMachine;
 }
 
-const portNfc = new SerialPort(constants.nfcPort, {
+const portNfc = new SerialPort(nfcPort, {
     baudRate: 9600
 });
 
@@ -23,7 +21,7 @@ const parserNfc = portNfc.pipe(new Readline({
     delimiter: '\n'
 }));
 
-const portLcd = new SerialPort(constants.lcdPort, {
+const portLcd = new SerialPort(lcdPort, {
     baudRate: 9600
 });
 
@@ -51,37 +49,29 @@ parserNfc.on('data', async function (rfid) {
 
     console.log(responseObj);
 
-    const verificationCode = await verify.verifyRFID(responseObj);
+    const status = await verify.verifyRFID(responseObj);
    
-    sendToArduino(verificationCode,rfid);
+    sendToArduino(status,rfid);
     
     console.log(JSON.stringify(responseObj));
 
 });
 
-function handleCode(rfid, code, mode) {
-    // If it's insert mode we write what we have to write
+function handleCode(rfid, code) {
     portNfc.write(code);
-    portLcd.write(mode);
-    if (insertMode) {
-        io.emit('rfid', rfid);
-        
-    }
+    portLcd.write(rfid);
 }
+
+// Assuming there's no admin mode
 
 const modes = {
-    "0": handleCode,
-    "1": handleCode,
-    "2": (rfid) => {
-        insertMode = !insertMode;
-        const mode = insertMode ? rfid+"-Mode insercio" : "Fi Mode insercio";
-        handleCode('2', mode, rfid)
-    }
+    "error": (rfid) => handleCode(rfid, '0'),
+    "success": (rfid) => handleCode(rfid, '1')
 }
 
-function sendToArduino(verificationCode,rfid) {
-    const mode = insertMode ? rfid + "-Mode insercio" : rfid;
-    modes[verificationCode](rfid, verificationCode, mode);
+function sendToArduino(status,rfid) {
+    modes[status](rfid);
+    console.log('[serialport] Sending info out of the serial port' .cyan);
    
     /** //Si esta en mode inserció enviam el codi rfid a la vista
     if (insertMode && verificationCode != 2) {
@@ -112,5 +102,4 @@ function sendToArduino(verificationCode,rfid) {
         portLcd.write(rfid);
 
     } */
-    console.log('[serialport] Sending info out of the serial port' .cyan);
 }
