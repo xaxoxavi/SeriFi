@@ -1,3 +1,4 @@
+
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const moment = require('moment');
@@ -20,6 +21,7 @@ const portNfc = new SerialPort(nfcPort, {
 const parserNfc = portNfc.pipe(new Readline({
     delimiter: '\n'
 }));
+
 
 const portLcd = new SerialPort(lcdPort, {
     baudRate: 9600
@@ -45,7 +47,8 @@ parserNfc.on('data', async function (rfid) {
     const hour = moment().format("HH:mm:ss");
     const weekDay = moment().format("dddd");
 
-    const responseObj = new Response(rfid, date, hour, weekDay, idMachine);
+    //TODO: Change "coso" to the proper machine id
+    const responseObj = new Response(rfid, date, hour, weekDay, "coso");
 
     console.log(responseObj);
 
