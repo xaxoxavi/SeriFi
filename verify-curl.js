@@ -1,5 +1,6 @@
 //Send http request to verify signin
 const constants = require('./constants');
+const exec = require('exec');
 
 module.exports.verifyRFID = async function (rfid) {
 
