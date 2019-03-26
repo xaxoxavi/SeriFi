@@ -2,18 +2,19 @@
 const constants = require('./constants');
 const exec = require('exec');
 
-module.exports.verifyRFID = async function (rfid) {
+module.exports.verifyRFID = async function (message) {
 
     // INSERTAR CRIDAD CURL
 
-    var message = {
-        rfid: rfid,
-        data: new Date(),
-        aula:'CFGM'
+    var jsonToSend = {
+        rfid: message.rfid,
+        data: message.date,
+        aula: message.idMachine
     };
 
+
    var comanda =  'curl -X POST  http://ec2-54-194-41-48.eu-west-1.compute.amazonaws.com:7080/ -H \'Content-Type: application/json\' ';
-   comanda += ' -d ' + JSON.stringify(message);
+   comanda += ' -d ' + JSON.stringify(jsonToSend);
 
     var dir = exec(comanda, function(err, stdout, stderr) {
         if (err) {
