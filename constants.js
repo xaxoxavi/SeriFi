@@ -1,6 +1,7 @@
 const VERIFY_RESPONSE = {
     SUCCESS: 'success',
-    ERROR: 'error'
+    ERROR: 'error',
+    INSERT: 'insert'
 }
 
 // Connection with nfc arduino port

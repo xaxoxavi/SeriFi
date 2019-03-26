@@ -2,7 +2,7 @@
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const moment = require('moment');
-const verify = require('./verify-mock');
+const verify = require('./verify-curl');
 const {nfcPort, lcdPort} = require('./constants');
 
 // Response Object
