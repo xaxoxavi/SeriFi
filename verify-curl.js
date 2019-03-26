@@ -13,8 +13,8 @@ module.exports.verifyRFID = async function (message) {
     };
 
 
-   var comanda =  'curl -X POST  http://ec2-54-194-41-48.eu-west-1.compute.amazonaws.com:7080/ -H \'Content-Type: application/json\' ';
-   comanda += ' -d ' + JSON.stringify(jsonToSend);
+   var comanda =  'curl -X POST  http://ec2-54-194-41-48.eu-west-1.compute.amazonaws.com:7080/ -H \'Content-Type: application/json\' -d ';
+   comanda +=  "'" + JSON.stringify(jsonToSend) +  "'";
 
     var dir = exec(comanda, function(err, stdout, stderr) {
         if (err) {
